@@ -1,24 +1,250 @@
-<!-- 
-Online HTML, CSS and JavaScript editor to run code online.
--->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <title>Browser</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DailyIQ</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 25px;
+  font-family: Arial, sans-serif;
+  background: #100d20;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  color: #b58aff;
+  font-size: 38px;
+}
+
+.card {
+  background: #211a38;
+  padding: 25px;
+  border-radius: 18px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+button, select {
+  padding: 13px;
+  margin: 8px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+button {
+  background: #9562e8;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ad85f5;
+}
+
+select {
+  background: white;
+  color: #211a38;
+}
+
+.hidden {
+  display: none;
+}
+
+#result {
+  color: #c9aaff;
+  font-size: 20px;
+}
+</style>
 </head>
 
 <body>
-  <h1>
-    Write, edit and run HTML, CSS and JavaScript code online.
-  </h1>
-  <p>
-    Our HTML editor updates the webview automatically in real-time as you write code.
-  </p>
-  <script src="script.js"></script>
-</body>
 
+<h1>DailyIQ</h1>
+<p>Learn something new every day.</p>
+
+<div class="card" id="start">
+  <h2>Welcome to DailyIQ!</h2>
+  <p>First, choose your age group.</p>
+
+  <select id="age">
+    <option value="">Choose age group</option>
+    <option>Under 12</option>
+    <option>12–15</option>
+    <option>16–18</option>
+    <option>19+</option>
+  </select>
+
+  <br>
+  <button onclick="begin()">Get Started</button>
+</div>
+
+<div class="card hidden" id="quiz">
+  <h2>Starting Quiz</h2>
+  <p id="question"></p>
+  <div id="answers"></div>
+  <p id="progress"></p>
+</div>
+
+<div class="card hidden" id="home">
+  <h2 id="welcome"></h2>
+  <p id="result"></p>
+
+  <h3>💡 Today's Fact</h3>
+  <p id="fact"></p>
+
+  <button onclick="showLesson()">Learn</button>
+  <button onclick="showMiniQuiz()">Mini Quiz</button>
+</div>
+
+<div class="card hidden" id="lesson">
+  <h2>Today's Lesson</h2>
+  <p id="lessonText"></p>
+  <button onclick="backHome()">Back</button>
+</div>
+
+<div class="card hidden" id="mini">
+  <h2>Quick Quiz</h2>
+  <p>Which planet is known as the Red Planet?</p>
+  <button onclick="check('Mars')">Mars</button>
+  <button onclick="check('Venus')">Venus</button>
+  <button onclick="check('Jupiter')">Jupiter</button>
+  <p id="miniResult"></p>
+  <button onclick="backHome()">Back</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "Which planet is closest to the Sun?",
+    a: ["Mercury", "Earth", "Mars"],
+    correct: "Mercury"
+  },
+  {
+    q: "How many sides does a triangle have?",
+    a: ["Four", "Three", "Five"],
+    correct: "Three"
+  },
+  {
+    q: "Which animal is a mammal?",
+    a: ["Shark", "Dolphin", "Crocodile"],
+    correct: "Dolphin"
+  },
+  {
+    q: "What is the largest ocean?",
+    a: ["Atlantic", "Indian", "Pacific"],
+    correct: "Pacific"
+  },
+  {
+    q: "What gas do plants absorb?",
+    a: ["Oxygen", "Carbon dioxide", "Hydrogen"],
+    correct: "Carbon dioxide"
+  }
+];
+
+let current = 0;
+let score = 0;
+let selectedAge = "";
+
+function hideAll() {
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.add("hidden");
+  });
+}
+
+function begin() {
+  selectedAge = document.getElementById("age").value;
+
+  if (!selectedAge) {
+    alert("Please choose your age group!");
+    return;
+  }
+
+  current = 0;
+  score = 0;
+  hideAll();
+  document.getElementById("quiz").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  let q = questions[current];
+
+  document.getElementById("question").textContent = q.q;
+  document.getElementById("progress").textContent =
+    "Question " + (current + 1) + " of 5";
+
+  let area = document.getElementById("answers");
+  area.innerHTML = "";
+
+  q.a.forEach(answer => {
+    let btn = document.createElement("button");
+    btn.textContent = answer;
+    btn.onclick = () => choose(answer);
+    area.appendChild(btn);
+  });
+}
+
+function choose(answer) {
+  if (answer === questions[current].correct) {
+    score++;
+  }
+
+  current++;
+
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    showHome();
+  }
+}
+
+function showHome() {
+  hideAll();
+  document.getElementById("home").classList.remove("hidden");
+
+  document.getElementById("welcome").textContent =
+    "Welcome to DailyIQ!";
+
+  document.getElementById("result").textContent =
+    "Your starting score: " + score + "/5";
+
+  document.getElementById("fact").textContent =
+    "Octopuses have three hearts!";
+}
+
+function showLesson() {
+  hideAll();
+  document.getElementById("lesson").classList.remove("hidden");
+
+  document.getElementById("lessonText").textContent =
+    "Space is full of amazing discoveries. Our solar system has eight planets, and each one is unique!";
+}
+
+function showMiniQuiz() {
+  hideAll();
+  document.getElementById("mini").classList.remove("hidden");
+  document.getElementById("miniResult").textContent = "";
+}
+
+function check(answer) {
+  document.getElementById("miniResult").textContent =
+    answer === "Mars" ? "Correct! 🎉" : "Not quite! Try again.";
+}
+
+function backHome() {
+  hideAll();
+  document.getElementById("home").classList.remove("hidden");
+}
+</script>
+
+</body>
 </html>
