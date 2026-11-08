@@ -1,274 +1,568 @@
 
-  <button onclick="completeGoal()">Complete Today's Goal</button>
-  <button onclick="backHome()">Back to Dashboard</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edvoria | Learn. Grow. Achieve.</title>
+<style>
+:root {
+  --cream:#F5F2EA;
+  --paper:#FFFEFA;
+  --sage:#DCE5D8;
+  --green:#344B3E;
+  --deep:#263A30;
+  --muted:#788278;
+  --beige:#E9DFD0;
+  --blue:#DCE6E8;
+  --border:#E8E5DC;
+  --shadow:0 8px 30px rgba(42,59,48,.07);
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--cream);
+  color:var(--deep);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button {font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible {outline:3px solid #8BA58E;outline-offset:3px}
+header {
+  background:var(--paper);
+  border-bottom:1px solid var(--border);
+  padding:17px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+.logo {
+  font-family:Georgia,serif;
+  font-size:25px;
+  font-weight:bold;
+  letter-spacing:2px;
+  color:var(--green);
+}
+.logo span {color:#A18F72}
+nav {display:flex;gap:9px;align-items:center}
+.nav-btn {
+  border:0;background:transparent;color:var(--green);
+  padding:10px 13px;border-radius:10px;
+}
+.nav-btn:hover,.nav-btn.active {background:var(--sage)}
+main {max-width:1150px;margin:auto;padding:30px 22px 65px}
+.hero {
+  background:var(--green);
+  color:white;
+  padding:42px;
+  border-radius:22px;
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:20px;
+  align-items:center;
+  overflow:hidden;
+}
+.eyebrow {
+  text-transform:uppercase;letter-spacing:2px;
+  font-size:11px;font-weight:bold;opacity:.8;
+}
+.hero h1 {
+  font:normal clamp(34px,5vw,55px)/1.1 Georgia,serif;
+  margin:15px 0;
+}
+.hero p {color:#E2E8E0;line-height:1.7;max-width:520px}
+.hero-art {
+  background:#E9DFD0;color:var(--green);
+  border-radius:50%;width:210px;height:210px;
+  display:flex;align-items:center;justify-content:center;
+  font:normal 78px Georgia,serif;
+  justify-self:center;
+  box-shadow:0 0 0 18px rgba(255,255,255,.07);
+}
+.btn {
+  background:var(--green);color:white;border:0;
+  border-radius:10px;padding:12px 19px;font-weight:bold;
+}
+.btn:hover {background:var(--deep)}
+.btn.light {background:var(--paper);color:var(--green)}
+.btn.outline {background:transparent;color:var(--green);border:1px solid var(--green)}
+.section-head {
+  display:flex;justify-content:space-between;
+  align-items:end;gap:15px;margin:35px 0 17px;
+}
+h2 {font:normal 28px Georgia,serif;margin:0}
+.small {font-size:13px;color:var(--muted)}
+.grid {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
+}
+.card {
+  background:var(--paper);border:1px solid var(--border);
+  border-radius:16px;padding:21px;box-shadow:var(--shadow);
+}
+.subject-card {cursor:pointer;transition:.2s}
+.subject-card:hover {transform:translateY(-3px);border-color:#A8B9A7}
+.subject-icon {
+  width:47px;height:47px;border-radius:13px;
+  display:grid;place-items:center;font-size:23px;margin-bottom:16px;
+}
+.subject-card h3 {margin:0 0 7px;font:normal 21px Georgia,serif}
+.subject-card p {font-size:13px;color:var(--muted);line-height:1.5;min-height:39px}
+.progress-track {height:7px;background:#EAECE5;border-radius:20px;overflow:hidden}
+.progress-fill {height:100%;background:#829A80;width:0%;transition:.3s}
+.row-between {display:flex;justify-content:space-between;gap:10px;align-items:center}
+.profile-box {
+  display:flex;gap:15px;align-items:center;flex-wrap:wrap;
+  margin:24px 0;
+}
+select,input {
+  background:var(--paper);border:1px solid var(--border);
+  border-radius:10px;padding:11px;color:var(--deep);
+}
+.stat {font:normal 28px Georgia,serif;margin-top:7px}
+.lesson-layout {display:grid;grid-template-columns:230px 1fr;gap:20px}
+.sidebar {align-self:start;position:sticky;top:90px}
+.sidebar button {
+  display:block;width:100%;text-align:left;border:0;
+  background:transparent;padding:12px;border-radius:9px;color:var(--green);
+}
+.sidebar button.active,.sidebar button:hover {background:var(--sage)}
+.lesson-content {min-width:0}
+.lesson-content h1 {font:normal 36px Georgia,serif;margin:10px 0}
+.lesson-content h2 {font-size:24px;margin:25px 0 12px}
+.lesson-content p,.lesson-content li {line-height:1.75}
+.lesson-content li {margin-bottom:6px}
+.callout {
+  background:#EDF1E9;border-left:4px solid #829A80;
+  padding:15px 18px;border-radius:8px;margin:18px 0;line-height:1.7;
+}
+.example {
+  background:#F1EADF;padding:18px;border-radius:12px;
+  margin:15px 0;line-height:1.8;
+}
+.math {
+  font:normal 27px Georgia,serif;text-align:center;
+  padding:13px;color:var(--green);
+}
+.question {
+  padding:17px 0;border-bottom:1px solid var(--border);
+}
+.question p {font-weight:bold}
+.option {
+  display:block;padding:11px 13px;margin:8px 0;
+  border:1px solid var(--border);border-radius:9px;
+  cursor:pointer;background:white;
+}
+.option:has(input:checked) {border-color:#829A80;background:#EDF1E9}
+.feedback {font-size:13px;margin-top:8px;line-height:1.5}
+.good {color:#386B46}.bad {color:#A44D43}
+.hidden {display:none!important}
+.tag {
+  display:inline-block;background:var(--sage);color:var(--green);
+  border-radius:20px;padding:6px 10px;font-size:11px;font-weight:bold;
+}
+footer {
+  text-align:center;padding:25px;color:var(--muted);
+  border-top:1px solid var(--border);font-size:12px;
+}
+@media(max-width:750px) {
+  header {padding:13px 4%;flex-wrap:wrap;gap:8px}
+  nav {width:100%;justify-content:space-between}
+  .nav-btn {padding:8px;font-size:12px}
+  main {padding:20px 14px 45px}
+  .hero {grid-template-columns:1fr;padding:27px}
+  .hero-art {width:120px;height:120px;font-size:50px}
+  .grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card {padding:15px}
+  .lesson-layout {grid-template-columns:1fr}
+  .sidebar {position:static;display:flex;overflow-x:auto;gap:5px}
+  .sidebar button {white-space:nowrap;width:auto}
+}
+@media(max-width:430px) {
+  .grid {grid-template-columns:1fr}
+  .hero-art {display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">EDVORIA<span>.</span></div>
+  <nav>
+    <button class="nav-btn active" onclick="goHome()">Home</button>
+    <button class="nav-btn" onclick="showSubjects()">Classrooms</button>
+    <button class="nav-btn" onclick="showProgress()">My Progress</button>
+  </nav>
+</header>
+
+<main>
+  <section id="homePage">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Your learning journey starts here</div>
+        <h1>A world of knowledge.</h1>
+        <p>Explore subjects, understand new ideas and build skills one lesson at a time. Learning that grows with you.</p>
+        <button class="btn light" onclick="showSubjects()">Explore classrooms →</button>
+      </div>
+      <div class="hero-art">E.</div>
+    </div>
+
+    <div class="profile-box">
+      <div>
+        <div class="small">YOUR LEARNING LEVEL</div>
+        <select id="ageSelect" onchange="setAge(this.value)">
+          <option value="8-11">Ages 8–11</option>
+          <option value="12-14">Ages 12–14</option>
+          <option value="15-18">Ages 15–18</option>
+          <option value="19+">Adults 19+</option>
+        </select>
+      </div>
+      <div class="card" style="flex:1;min-width:180px">
+        <div class="small">LESSONS COMPLETED</div>
+        <div class="stat" id="homeCompleted">0</div>
+      </div>
+      <div class="card" style="flex:1;min-width:180px">
+        <div class="small">YOUR DAILY GOAL</div>
+        <div class="stat">1 lesson</div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div><h2>Continue learning</h2><div class="small">Choose a classroom to begin.</div></div>
+    </div>
+    <div class="grid" id="homeSubjects"></div>
+  </section>
+
+  <section id="subjectsPage" class="hidden">
+    <div class="section-head">
+      <div><div class="eyebrow">Explore and discover</div><h2>Subject classrooms</h2></div>
+      <span class="tag">6 subjects</span>
+    </div>
+    <p class="small">Choose a subject to explore its lesson.</p>
+    <div class="grid" id="allSubjects"></div>
+  </section>
+
+  <section id="lessonPage" class="hidden">
+    <button class="btn outline" onclick="showSubjects()">← All classrooms</button>
+    <div class="lesson-layout" style="margin-top:22px">
+      <aside class="card sidebar">
+        <div class="small" style="padding:10px">LESSON CONTENT</div>
+        <button class="active" onclick="lessonTab('overview',this)">Overview</button>
+        <button onclick="lessonTab('learn',this)">Learn</button>
+        <button onclick="lessonTab('activity',this)">Activity</button>
+        <button onclick="lessonTab('quiz',this)">Knowledge check</button>
+      </aside>
+      <article class="card lesson-content" id="lessonBody"></article>
+    </div>
+  </section>
+
+  <section id="progressPage" class="hidden">
+    <div class="section-head">
+      <div><div class="eyebrow">Your achievements</div><h2>My learning progress</h2></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="small">COMPLETED LESSONS</div><div class="stat" id="progressCompleted">0</div></div>
+      <div class="card"><div class="small">QUIZ QUESTIONS ANSWERED</div><div class="stat" id="progressQuestions">0</div></div>
+      <div class="card"><div class="small">CORRECT ANSWERS</div><div class="stat" id="progressCorrect">0</div></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h2 style="font-size:23px">Your classrooms</h2>
+      <div id="progressSubjects"></div>
+    </div>
+  </section>
+</main>
+
+<footer>EDVORIA · Learn More. Become More.</footer>
 
 <script>
-let selectedAge = "";
-let score = 0;
-let current = 0;
-
-const questions = [
-  {
-    q: "What is the largest planet?",
-    a: ["Earth", "Jupiter", "Mars"],
-    correct: 1
-  },
-  {
-    q: "How many sides does a triangle have?",
-    a: ["Three", "Four", "Five"],
-    correct: 0
-  },
-  {
-    q: "Which animal is a mammal?",
-    a: ["Shark", "Dolphin", "Crocodile"],
-    correct: 1
-  },
-  {
-    q: "What is 8 × 7?",
-    a: ["54", "56", "64"],
-    correct: 1
-  },
-  {
-    q: "Which planet is closest to the Sun?",
-    a: ["Venus", "Earth", "Mercury"],
-    correct: 2
-  }
+const subjects = [
+ {id:"math",name:"Mathematics",icon:"∑",color:"#E9DFD0",description:"Explore numbers, patterns and problem-solving."},
+ {id:"english",name:"English",icon:"Aa",color:"#DCE6E8",description:"Develop reading, writing and communication."},
+ {id:"science",name:"Science",icon:"⚗",color:"#DCE5D8",description:"Discover how the natural world works."},
+ {id:"history",name:"History & Geography",icon:"◎",color:"#EADFD8",description:"Explore people, places and the past."},
+ {id:"computer",name:"Computer Science",icon:"⌘",color:"#E4E2D8",description:"Understand technology, logic and coding."},
+ {id:"life",name:"Life Skills",icon:"◇",color:"#E6E4D9",description:"Build useful skills for everyday life."}
 ];
 
-function hideAll() {
-  document.querySelectorAll(".card").forEach(card => {
-    card.classList.add("hidden");
-  });
-}
-
-function showAge() {
-  hideAll();
-  document.getElementById("ageScreen").classList.remove("hidden");
-}
-
-function begin() {
-  selectedAge = document.getElementById("age").value;
-
-  if (!selectedAge) {
-    alert("Please choose your age group!");
-    return;
+const lessons = {
+ math:{
+  title:"Understanding Fractions",
+  objective:["Identify numerators and denominators","Compare and simplify fractions","Use fractions in everyday problems"],
+  prerequisite:"Counting, multiplication and division.",
+  sections:{
+   "8-11":{
+    intro:"A fraction shows equal parts of a whole. Imagine sharing a pizza cut into four equal slices. If you take one slice, you have one-quarter.",
+    example:"1/4 means 1 part selected out of 4 equal parts. The top number is the numerator. The bottom number is the denominator.",
+    activity:"Draw a rectangle and divide it into 4 equal sections. Shade 3 sections. Write the fraction you shaded.",
+    questions:[
+     ["In 3/5, what is the numerator?",["3","5","8"],0,"The numerator is the top number: 3."],
+     ["What is half of 16?",["6","8","10"],1,"16 ÷ 2 = 8."],
+     ["A cake has 8 equal pieces. You eat 3. What fraction did you eat?",["3/5","5/8","3/8"],2,"Three of the eight equal pieces is 3/8."]
+    ]
+   },
+   "12-14":{
+    intro:"Equivalent fractions have different numerators and denominators but represent the same amount. You can create one by multiplying or dividing the top and bottom by the same non-zero number.",
+    example:"12/18 simplifies to 2/3 because both 12 and 18 can be divided by 6. To add 1/4 + 1/2, first convert 1/2 into 2/4. The answer is 3/4.",
+    activity:"Compare 2/3 and 3/5. Convert both to fifteenths. Which fraction is larger? Explain why.",
+    questions:[
+     ["Simplify 15/20.",["3/4","5/6","2/5"],0,"Divide the numerator and denominator by 5."],
+     ["Which is larger?",["3/4","5/8","They are equal"],0,"3/4 = 6/8, which is greater than 5/8."],
+     ["What is 1/3 + 1/6?",["2/9","1/2","2/6"],1,"Convert 1/3 to 2/6. Then 2/6 + 1/6 = 3/6 = 1/2."]
+    ]
+   },
+   "15-18":{
+    intro:"Fractions can be multiplied, divided and converted into decimals and percentages. Multiplication uses the numerators and denominators directly. Division uses the reciprocal of the second fraction.",
+    example:"2/3 × 3/5 = 6/15 = 2/5. For division: 3/4 ÷ 2/5 = 3/4 × 5/2 = 15/8.",
+    activity:"A class has 30 learners. Two-fifths take part in a science activity. Calculate how many learners participate. Show your working.",
+    questions:[
+     ["Calculate 2/3 × 3/5.",["2/5","5/8","6/8"],0,"Multiply across to get 6/15, then simplify to 2/5."],
+     ["What is 3/4 as a percentage?",["25%","50%","75%"],2,"3 ÷ 4 = 0.75, which is 75%."],
+     ["What is 2/5 of 30?",["10","12","15"],1,"30 ÷ 5 = 6, then 6 × 2 = 12."]
+    ]
+   },
+   "19+":{
+    intro:"Fractions are useful in budgeting, measurements, data and proportions. A fraction represents a ratio between a selected quantity and a total or reference quantity.",
+    example:"If 3/8 of a monthly budget of 2,400 units is allocated to housing, the amount is 2,400 × 3/8 = 900 units.",
+    activity:"A project uses 5/12 of its budget for materials. If the total budget is 1,200 units, calculate the amount spent on materials and the amount remaining.",
+    questions:[
+     ["Simplify 24/36.",["2/3","3/4","4/5"],0,"Divide both numbers by 12."],
+     ["Calculate 5/8 of 400.",["200","250","300"],1,"400 ÷ 8 = 50; 50 × 5 = 250."],
+     ["What is 3/5 as a decimal?",["0.3","0.5","0.6"],2,"3 ÷ 5 = 0.6."]
+    ]
+   }
   }
-
-  current = 0;
-  score = 0;
-  showQuestion();
-}
-
-function showQuestion() {
-  hideAll();
-  document.getElementById("quiz").classList.remove("hidden");
-
-  const q = questions[current];
-
-  document.getElementById("questionNumber").textContent =
-    "Question " + (current + 1) + " of 5";
-
-  document.getElementById("question").textContent = q.q;
-  document.getElementById("quizFeedback").textContent = "";
-
-  const answers = document.getElementById("answers");
-  answers.innerHTML = "";
-
-  q.a.forEach((answer, index) => {
-    const button = document.createElement("button");
-    button.textContent = answer;
-    button.className = "option";
-    button.onclick = () => choose(index);
-    answers.appendChild(button);
-  });
-}
-
-function choose(index) {
-  if (index === questions[current].correct) {
-    score++;
+ },
+ english:{
+  title:"Finding the Main Idea",
+  objective:["Identify the main idea in a text","Distinguish supporting details from the main point","Summarise information clearly"],
+  prerequisite:"Reading a short paragraph and identifying its subject.",
+  sections:{
+   "8-11":{intro:"The main idea is what a paragraph is mostly about. Supporting details give extra information about that idea.",example:"Text: Bees visit flowers to collect nectar. As they move between flowers, they carry pollen. This helps plants make seeds. Main idea: Bees help plants reproduce.",activity:"Read the example again. Write one detail that supports the main idea.",questions:[["What is the main idea?",["Bees are yellow","Bees help plants reproduce","Flowers are colourful"],1,"The other sentences explain how bees help plants."],["What is a supporting detail?",["Extra information","The title only","An unrelated idea"],0,"Supporting details explain or prove the main idea."],["A good summary should include:",["Every tiny detail","The main point","Unrelated facts"],1,"A summary focuses on the most important information."]]},
+   "12-14":{intro:"A paragraph's main idea is its central message. Supporting evidence may include facts, examples, explanations or descriptions.",example:"A text about public transport may explain that buses carry many passengers, reduce the number of individual car journeys and connect neighbourhoods. Its main idea could be that public transport supports connected and efficient cities.",activity:"Write a one-sentence summary of the example. Avoid copying every detail.",questions:[["Which best supports a main idea?",["An example relevant to it","A random opinion","An unrelated fact"],0,"Relevant evidence strengthens the central message."],["A summary should be:",["Longer than the text","Focused and concise","A list of every word"],1,"A summary keeps key ideas without unnecessary detail."],["What should you identify first?",["The central topic and message","The longest word","The final punctuation"],0,"Understanding the topic helps reveal the main idea."]]},
+   "15-18":{intro:"Main ideas can be explicit or implied. An explicit main idea is stated directly. An implied main idea must be inferred from patterns across the text.",example:"If a passage describes rising temperatures, changing rainfall and shifting habitats, the implied main idea may be that climate patterns affect ecosystems.",activity:"Write two pieces of evidence that could support the implied main idea in the example.",questions:[["An implied main idea is:",["Always in the title","Inferred from details","A random guess"],1,"Readers use evidence and reasoning to infer it."],["Which is strongest evidence?",["A relevant statistic","An unrelated story","A personal insult"],0,"Relevant, reliable evidence supports a claim."],["A summary should avoid:",["Central ideas","Relevant evidence","Unnecessary repetition"],2,"Repeating minor details makes a summary less clear."]]},
+   "19+":{intro:"Identifying the main idea is essential when reading reports, instructions and professional communication. Separate the writer's central claim from examples and supporting evidence.",example:"A workplace report states that flexible scheduling improved staff attendance, reduced travel time and helped teams coordinate. Its central idea is that flexible scheduling can improve workplace organisation.",activity:"Imagine reading a report about a new workplace process. Write its central claim and list two kinds of evidence you would look for.",questions:[["A central claim is:",["The main point being communicated","A decorative heading","An unrelated example"],0,"The central claim expresses the key message."],["Which evidence is most useful?",["Relevant measured outcomes","An unsupported rumour","A random anecdote"],0,"Measured outcomes can help test a claim."],["Why summarise a report?",["To remove all evidence","To communicate key findings efficiently","To change its meaning"],1,"A summary communicates essential information accurately."]] }
   }
-
-  current++;
-
-  if (current < questions.length) {
-    showQuestion();
-  } else {
-    showDashboard();
+ },
+ science:{
+  title:"Understanding Ecosystems",
+  objective:["Define an ecosystem","Identify producers, consumers and decomposers","Explain how energy moves through a food chain"],
+  prerequisite:"Basic knowledge of plants, animals and habitats.",
+  sections:{
+   "8-11":{intro:"An ecosystem is a place where living things interact with each other and with their surroundings. A garden, pond or forest can be an ecosystem.",example:"Grass is eaten by a rabbit. A fox may eat the rabbit. The grass, rabbit and fox are connected in a food chain.",activity:"Draw a food chain with a plant, a plant-eating animal and an animal that eats it. Add arrows to show the direction of energy transfer.",questions:[["Which is a producer?",["Grass","Rabbit","Fox"],0,"Plants make their own food using light energy."],["What does a rabbit eat in this example?",["Fox","Grass","Stone"],1,"The rabbit eats grass."],["What do arrows in a food chain show?",["Energy transfer","Animal size","Weather"],0,"Arrows point in the direction energy moves."]]},
+   "12-14":{intro:"An ecosystem includes organisms and non-living factors such as water, sunlight, soil and temperature. Organisms depend on one another through feeding relationships and other interactions.",example:"Sun → grass → grasshopper → frog. Grass is the producer. The grasshopper is a primary consumer, and the frog is a secondary consumer.",activity:"Create a food web using at least four organisms. Identify one possible effect if one organism becomes much less common.",questions:[["Which is an abiotic factor?",["Water","Frog","Grass"],0,"Abiotic means non-living."],["What is a producer?",["An organism that makes its own food","An animal that hunts","A decomposer only"],0,"Plants and algae are common producers."],["A food web shows:",["Connected food chains","Only one animal","Only weather"],0,"Food webs show several feeding relationships."]]},
+   "15-18":{intro:"Energy enters many ecosystems through sunlight captured by photosynthetic organisms. Energy is transferred between trophic levels, but some is dissipated as heat and used in life processes at each level.",example:"In a simplified chain, plants support herbivores, which support carnivores. The energy available generally decreases at higher trophic levels.",activity:"Explain why a food chain usually has fewer top predators than producers. Include energy transfer in your answer.",questions:[["What process captures light energy in plants?",["Photosynthesis","Respiration only","Digestion"],0,"Photosynthesis stores light energy in chemical compounds."],["Why is less energy available at higher trophic levels?",["Energy is used and dissipated","Energy is created","Predators do not need energy"],0,"Organisms use energy for life processes and release heat."],["A decomposer helps:",["Recycle nutrients","Stop all feeding","Remove sunlight"],0,"Decomposers break down dead material and return nutrients."]]},
+   "19+":{intro:"Ecosystems are dynamic systems shaped by energy flow, nutrient cycling and interactions among organisms. Human activity can alter habitats, populations and ecosystem services.",example:"Removing a major predator may change herbivore numbers, which can affect vegetation and other species. This is one example of a trophic cascade.",activity:"Choose a local habitat. Identify one human activity that could affect it, one possible ecological consequence and one way to reduce the impact.",questions:[["An ecosystem includes:",["Living and non-living components","Only animals","Only plants"],0,"Both organisms and their physical environment matter."],["A trophic cascade is:",["A chain of effects across feeding levels","A type of rainfall","A soil mineral"],0,"Changes at one trophic level can affect others."],["Biodiversity means:",["Variety of life","Amount of sunlight","Water temperature only"],0,"Biodiversity describes the variety of living organisms."]] }
   }
-}
-
-function showDashboard() {
-  hideAll();
-  document.getElementById("dashboard").classList.remove("hidden");
-
-  document.getElementById("welcome").textContent =
-    "Welcome! Your age group: " + selectedAge;
-
-  document.getElementById("progressText").textContent =
-    "Your starting score: " + score + "/5";
-}
-
-function showLesson() {
-  hideAll();
-  document.getElementById("lesson").classList.remove("hidden");
-
-  document.getElementById("lessonTitle").textContent =
-    "Discover the Solar System";
-
-  document.getElementById("lessonText").textContent =
-    "Our solar system has eight planets. They orbit the Sun, which is a star.";
-
-  document.getElementById("lessonFact").textContent =
-    "Fun fact: Jupiter is the largest planet!";
-}
-
-function showMiniQuiz() {
-  hideAll();
-  document.getElementById("mini").classList.remove("hidden");
-  document.getElementById("miniResult").textContent = "";
-}
-
-function checkMini(correct) {
-  document.getElementById("miniResult").textContent =
-    correct ? "Correct! Great work! 🎉" : "Not quite! Try again.";
-}
-
-function showProgress() {
-  hideAll();
-  document.getElementById("progress").classList.remove("hidden");
-
-  document.getElementById("scoreDisplay").textContent =
-    "Starting test score: " + score + "/5";
-}
-
-function showGoals() {
-  hideAll();
-  document
-<script>
-let selectedAge = "";
-let current = 0;
-let score = 0;
-
-const questions = [
-  { q: "Which planet do we live on?", a: ["Mars", "Earth", "Venus"], correct: 1 },
-  { q: "What is 8 × 7?", a: ["54", "56", "64"], correct: 1 },
-  { q: "How many sides does a triangle have?", a: ["Three", "Four", "Five"], correct: 0 },
-  { q: "Which animal is a mammal?", a: ["Shark", "Dolphin", "Crocodile"], correct: 1 },
-  { q: "Which planet is closest to the Sun?", a: ["Venus", "Earth", "Mercury"], correct: 2 }
-];
-
-function hideAll() {
-  document.querySelectorAll(".card").forEach(card => {
-    card.classList.add("hidden");
-  });
-}
-
-function showAge() {
-  hideAll();
-  document.getElementById("ageScreen").classList.remove("hidden");
-}
-
-function begin() {
-  selectedAge = document.getElementById("age").value;
-
-  if (!selectedAge) {
-    alert("Please choose your age group!");
-    return;
+ },
+ history:{
+  title:"How We Learn About the Past",
+  objective:["Identify historical sources","Distinguish primary and secondary sources","Evaluate evidence and reliability"],
+  prerequisite:"Understanding that history studies events and societies in the past.",
+  sections:{
+   "8-11":{intro:"Historians use clues called sources to learn about the past. Sources can be objects, photographs, letters, buildings or stories.",example:"An old coin is an object from the past. It may show a ruler, a date or a symbol.",activity:"Imagine finding an old photograph. Write three questions you would ask to learn more about it.",questions:[["Which could be a historical source?",["An old coin","A future prediction","A made-up date"],0,"An old coin is evidence from the past."],["Why do historians study objects?",["To learn about past people","To predict tomorrow","To avoid evidence"],0,"Objects can reveal how people lived."],["What should you do if a source is unclear?",["Ask more questions","Guess immediately","Ignore all other sources"],0,"Careful investigation helps avoid mistakes."]]},
+   "12-14":{intro:"A primary source comes from the time being studied or from someone directly involved. A secondary source explains or analyses the past using evidence.",example:"A diary written during an event is usually a primary source. A modern textbook explaining that event is a secondary source.",activity:"Classify a photograph taken during an event, a modern documentary and a letter written by a participant. Explain your choices.",questions:[["A diary written during an event is usually:",["Primary","Secondary","Neither"],0,"It was created at the time."],["A modern textbook is usually:",["Primary","Secondary","An artefact"],1,"It interprets and explains past evidence."],["Why compare multiple sources?",["To check different perspectives","To make research slower","To avoid questions"],0,"Sources may be incomplete or biased."]]},
+   "15-18":{intro:"Historical interpretation involves context, provenance, purpose and perspective. A source can be valuable without being completely reliable.",example:"A government announcement may provide useful information about official policy, but it may not describe every person's experience.",activity:"Choose a historical speech or newspaper report. Identify its creator, intended audience, purpose and one limitation.",questions:[["Provenance means:",["Where a source comes from","Its colour","Its page count"],0,"Provenance includes origin and creation context."],["Bias can affect:",["How information is presented","The date automatically","The physical size only"],0,"A creator's perspective can shape presentation."],["A source limitation is:",["Something it cannot reliably tell us","A reason to ignore it completely","Always a spelling mistake"],0,"Every source has limits on what it can establish."]]},
+   "19+":{intro:"Historical research requires evaluating evidence rather than accepting every account at face value. Consider authorship, intended audience, context, corroboration and gaps in the record.",example:"Two eyewitness accounts may disagree because people observed different parts of an event or remembered it differently. Comparing them with other evidence can improve an interpretation.",activity:"Select a historical claim and list the types of evidence you would seek to evaluate it. Explain how you would check conflicting accounts.",questions:[["Corroboration means:",["Checking a claim against other evidence","Repeating a claim","Removing context"],0,"Independent evidence can strengthen or challenge an interpretation."],["Why consider an author's purpose?",["It may shape what is included","It proves everything is false","It replaces evidence"],0,"Purpose helps explain a source's content and omissions."],["Good historical analysis should:",["Evaluate evidence and uncertainty","Ignore disagreement","Assume one source is perfect"],0,"Historical conclusions should reflect the available evidence."]] }
   }
-
-  current = 0;
-  score = 0;
-  showQuestion();
-}
-
-function showQuestion() {
-  hideAll();
-  document.getElementById("quiz").classList.remove("hidden");
-
-  let q = questions[current];
-
-  document.getElementById("questionNumber").textContent =
-    "Question " + (current + 1) + " of 5";
-
-  document.getElementById("question").textContent = q.q;
-
-  let answers = document.getElementById("answers");
-  answers.innerHTML = "";
-
-  q.a.forEach((answer, index) => {
-    let button = document.createElement("button");
-    button.textContent = answer;
-    button.className = "option";
-    button.onclick = function() {
-      choose(index);
-    };
-    answers.appendChild(button);
-  });
-}
-
-function choose(index) {
-  if (index === questions[current].correct) {
-    score++;
+ },
+ computer:{
+  title:"Thinking Like a Programmer",
+  objective:["Understand algorithms","Recognise sequence and decisions","Write a simple set of instructions"],
+  prerequisite:"Following simple instructions and recognising steps in a process.",
+  sections:{
+   "8-11":{intro:"An algorithm is a set of clear steps used to complete a task. A recipe is an everyday example of an algorithm.",example:"1. Get a cup. 2. Pour in water. 3. Add a tea bag. 4. Wait. The steps must be in a sensible order.",activity:"Write five numbered steps explaining how to pack a school bag. Ask someone to follow your steps exactly.",questions:[["What is an algorithm?",["A set of steps","A computer screen","A type of game"],0,"An algorithm gives instructions for a task."],["Why does order matter?",["Steps may depend on earlier steps","It never matters","It changes the alphabet"],0,"Some tasks only work when steps are in the right order."],["Which is a clear instruction?",["Put the book in the bag","Do something","Be better"],0,"Clear instructions say exactly what to do."]]},
+   "12-14":{intro:"Algorithms can include sequence, selection and repetition. Sequence means steps in order. Selection makes a decision. Repetition runs steps more than once.",example:"IF it is raining, THEN take an umbrella. ELSE take a hat. This is selection because the action depends on a condition.",activity:"Write an algorithm for crossing a pedestrian crossing safely. Include a decision based on whether traffic has stopped.",questions:[["An IF statement is an example of:",["Selection","Repetition","A variable only"],0,"It chooses an action based on a condition."],["A loop is used for:",["Repeating steps","Deleting all steps","Changing a screen"],0,"Loops repeat instructions."],["Sequence means:",["The order of instructions","A random choice","A computer brand"],0,"Sequence is the order in which steps happen."]]},
+   "15-18":{intro:"Computational thinking includes decomposition, pattern recognition, abstraction and algorithm design. These methods help turn complex problems into manageable steps.",example:"To calculate the average of three numbers: add the numbers, then divide the total by three. For 6, 9 and 12: (6 + 9 + 12) ÷ 3 = 9.",activity:"Design an algorithm that takes three numbers as input and outputs their average. Include what happens if an input is not a valid number.",questions:[["Decomposition means:",["Breaking a problem into smaller parts","Combining unrelated data","Repeating code forever"],0,"Smaller parts are easier to understand and solve."],["What is the average of 4, 8 and 12?",["6","8","10"],1,"(4 + 8 + 12) ÷ 3 = 8."],["Why validate input?",["To check that data is suitable","To make code colourful","To remove all variables"],0,"Validation helps prevent invalid data from causing errors."]]},
+   "19+":{intro:"Algorithms are step-by-step procedures for solving problems. Good algorithm design considers correctness, clarity, efficiency and edge cases.",example:"A search algorithm looks for a target in data. Linear search checks items one by one. Binary search repeatedly halves a sorted search range.",activity:"Describe a real task that could be improved by an algorithm. Identify its inputs, outputs, steps and one possible edge case.",questions:[["Binary search requires data to be:",["Sorted","Randomly arranged","Deleted"],0,"Binary search relies on an ordered search space."],["An edge case is:",["An unusual boundary situation","The normal middle case","A type of keyboard"],0,"Edge cases test unusual or boundary inputs."],["Algorithm efficiency concerns:",["Resources such as time and memory","Font choice only","Screen brightness"],0,"Efficiency considers the resources needed to solve a problem."]] }
   }
-
-  current++;
-
-  if (current < questions.length) {
-    showQuestion();
-  } else {
-    showDashboard();
+ },
+ life:{
+  title:"Understanding a Budget",
+  objective:["Explain income and expenses","Distinguish needs and wants","Create a simple balanced budget"],
+  prerequisite:"Basic addition, subtraction and percentages.",
+  sections:{
+   "8-11":{intro:"A budget is a plan for how to use money. It helps us think about what money comes in and what money goes out.",example:"You have 20 units. You spend 8 on a book and 5 on a snack. You have 7 units left because 20 − 8 − 5 = 7.",activity:"Imagine you have 30 units to spend or save. Plan how you would divide the money and explain your choices.",questions:[["Money coming in is called:",["Income","Expense","Debt"],0,"Income is money received."],["Money spent is called:",["Income","Expense","Savings"],1,"An expense is money used to pay for something."],["If you have 20 and spend 6, how much remains?",["12","14","16"],1,"20 − 6 = 14."]]},
+   "12-14":{intro:"A budget compares income with expenses over a period. Needs are essential costs. Wants are optional purchases. Saving means setting aside some money for later.",example:"Monthly income: 500 units. Expenses: 200 for essentials, 100 for transport and 50 for entertainment. Remaining amount: 150 units.",activity:"Create a sample monthly budget with 500 units. Include at least three expense categories and an amount saved.",questions:[["Which is usually a need?",["Basic food","A new game","Decorative item"],0,"Food is an essential everyday need."],["What is a budget?",["A plan for income and spending","A shopping list only","A bank card"],0,"A budget plans how money will be used."],["Income is 300 and expenses are 220. What remains?",["80","120","520"],0,"300 − 220 = 80."]]},
+   "15-18":{intro:"A useful budget separates fixed expenses, variable expenses and savings. Tracking spending helps people compare their plan with what actually happens.",example:"If monthly income is 2,000 units and total expenses are 1,500, the remaining 500 units can be saved or allocated to other goals.",activity:"Make a budget for a fictional monthly income. Include fixed costs, variable costs, savings and a small emergency allowance.",questions:[["A fixed expense is generally:",["Regular and predictable","Always optional","Impossible to plan"],0,"Fixed costs are usually stable over a period."],["What is a budget surplus?",["Income exceeds expenses","Expenses exceed income","Income is zero"],0,"A surplus means money remains after expenses."],["Why track actual spending?",["To compare it with the plan","To avoid knowing costs","To remove savings"],0,"Tracking helps identify differences and adjust the budget."]]},
+   "19+":{intro:"Personal budgeting involves planning cash flow, prioritising needs, managing irregular expenses and setting realistic financial goals. A budget is a planning tool, not a guarantee of future outcomes.",example:"A monthly net income of 4,000 units and expenses of 3,200 leaves 800 units. That amount can be allocated among savings, debt payments and other priorities.",activity:"Create a sample budget using a fictional income. Include recurring expenses, variable expenses, savings goals and a contingency category. Check that the totals balance.",questions:[["Cash flow describes:",["Money moving in and out","Only the money saved","A shopping receipt"],0,"Cash flow tracks incoming and outgoing money."],["An emergency fund is intended for:",["Unexpected costs","Every planned purchase","Entertainment only"],0,"It provides a reserve for unforeseen expenses."],["A balanced budget should:",["Account for all income and expenses","Ignore irregular costs","Always spend every unit"],0,"A complete plan accounts for all categories and allocations."]] }
   }
+ }
+};
+
+let age = localStorage.getItem("edvoriaAge") || "8-11";
+let currentSubject = "math";
+let currentTab = "overview";
+let answersChecked = false;
+let stats = JSON.parse(localStorage.getItem("edvoriaStats") || '{"completed":[],"answered":0,"correct":0}');
+
+function saveStats(){
+ localStorage.setItem("edvoriaStats",JSON.stringify(stats));
+ updateStats();
 }
-
-function showDashboard() {
-  hideAll();
-  document.getElementById("dashboard").classList.remove("hidden");
-
-  document.getElementById("welcome").textContent =
-    "Welcome! Age group: " + selectedAge;
-
-  document.getElementById("progressText").textContent =
-    "Your starting score: " + score + "/5";
+function setAge(value){
+ age=value;
+ localStorage.setItem("edvoriaAge",age);
 }
-
-function showLesson() {
-  hideAll();
-  document.getElementById("lesson").classList.remove("hidden");
+function hidePages(){
+ ["homePage","subjectsPage","lessonPage","progressPage"].forEach(id=>document.getElementById(id).classList.add("hidden"));
 }
-
-function showMiniQuiz() {
-  hideAll();
-  document.getElementById("mini").classList.remove("hidden");
-  document.getElementById("miniResult").textContent = "";
+function goHome(){
+ hidePages();
+ document.getElementById("homePage").classList.remove("hidden");
+ updateStats();
 }
-
-function checkMini(correct) {
-  document.getElementById("miniResult").textContent =
-    correct ? "Correct! Great work! 🎉" : "Try again!";
+function showSubjects(){
+ hidePages();
+ document.getElementById("subjectsPage").classList.remove("hidden");
+ renderSubjects("allSubjects");
 }
-
-function showProgress() {
-  hideAll();
-  document.getElementById("progress").classList.remove("hidden");
-  document.getElementById("scoreDisplay").textContent =
-    "Starting test score: " + score + "/5";
+function showProgress(){
+ hidePages();
+ document.getElementById("progressPage").classList.remove("hidden");
+ updateStats();
 }
-
-function showGoals() {
-  hideAll();
-  document.getElementById("goals").classList.remove("hidden");
+function renderSubjects(target){
+ const container=document.getElementById(target);
+ container.innerHTML=subjects.map(s=>{
+  const done=stats.completed.includes(s.id);
+  return `<div class="card subject-card" onclick="openLesson('${s.id}')">
+   <div class="subject-icon" style="background:${s.color}">${s.icon}</div>
+   <h3>${s.name}</h3><p>${s.description}</p>
+   <div class="row-between small"><span>${done?"Lesson completed":"Starter lesson"}</span><span>→</span></div>
+  </div>`;
+ }).join("");
 }
-
-function completeGoal() {
-  document.getElementById("goalStatus").textContent =
-    "Goal completed! Well done! 🌟";
+function updateStats(){
+ document.getElementById("homeCompleted").textContent=stats.completed.length;
+ document.getElementById("progressCompleted").textContent=stats.completed.length;
+ document.getElementById("progressQuestions").textContent=stats.answered;
+ document.getElementById("progressCorrect").textContent=stats.correct;
+ renderSubjects("homeSubjects");
+ document.getElementById("progressSubjects").innerHTML=subjects.map(s=>{
+  const done=stats.completed.includes(s.id);
+  return `<div style="padding:15px 0;border-bottom:1px solid var(--border)">
+   <div class="row-between"><strong>${s.name}</strong><span class="small">${done?"Completed":"Not completed"}</span></div>
+   <div class="progress-track" style="margin-top:10px"><div class="progress-fill" style="width:${done?100:0}%"></div></div>
+  </div>`;
+ }).join("");
 }
-
-function backHome() {
-  showDashboard();
+function openLesson(id){
+ currentSubject=id;
+ currentTab="overview";
+ answersChecked=false;
+ hidePages();
+ document.getElementById("lessonPage").classList.remove("hidden");
+ renderLesson();
 }
+function lessonTab(tab,button){
+ currentTab=tab;
+ answersChecked=false;
+ document.querySelectorAll(".sidebar button").forEach(b=>b.classList.remove("active"));
+ if(button)button.classList.add("active");
+ renderLesson();
+}
+function renderLesson(){
+ const subject=subjects.find(s=>s.id===currentSubject);
+ const lesson=lessons[currentSubject];
+ const part=lesson.sections[age];
+ const body=document.getElementById("lessonBody");
+ let html="";
+ if(currentTab==="overview"){
+  html=`<span class="tag">${subject.name}</span>
+   <h1>${lesson.title}</h1>
+   <p class="small">Learner level: ${age==="19+"?"Adults 19+": "Ages "+age}</p>
+   <h2>What you will learn</h2>
+   <ul>${lesson.objective.map(x=>`<li>${x}</li>`).join("")}</ul>
+   <h2>Before you begin</h2><p>${lesson.prerequisite}</p>
+   <div class="callout"><strong>Your learning goal</strong><br>Read the lesson, complete the activity and try the knowledge check. Take your time and learn at your own pace.</div>
+   <button class="btn" onclick="lessonTab('learn',document.querySelectorAll('.sidebar button')[1])">Start lesson →</button>`;
+ }
+ if(currentTab==="learn"){
+  html=`<span class="tag">LEARN</span><h1>${lesson.title}</h1>
+   <h2>Lesson explanation</h2><p>${part.intro}</p>
+   <h2>Worked example</h2><div class="example">${part.example}</div>
+   <div class="callout"><strong>Think about it</strong><br>Can you explain the main idea in your own words before moving on?</div>
+   <h2>Key learning points</h2><ul>${lesson.objective.map(x=>`<li>${x}</li>`).join("")}</ul>
+   <button class="btn" onclick="lessonTab('activity',document.querySelectorAll('.sidebar button')[2])">Try the activity →</button>`;
+ }
+ if(currentTab==="activity"){
+  html=`<span class="tag">PRACTISE</span><h1>Learning activity</h1>
+   <p>${part.activity}</p>
+   <div class="callout"><strong>Challenge:</strong><br>Explain how you reached your answer. Showing your thinking is an important part of learning.</div>
+   <p class="small">You can write your response in your notebook or use the space below.</p>
+   <textarea id="activityAnswer" rows="5" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;font:inherit" placeholder="Write your answer here..."></textarea>
+   <p class="small">Your activity response stays in this page and is not sent anywhere.</p>
+   <button class="btn" onclick="lessonTab('quiz',document.querySelectorAll('.sidebar button')[3])">Go to knowledge check →</button>`;
+ }
+ if(currentTab==="quiz"){
+  html=`<span class="tag">CHECK YOUR UNDERSTANDING</span><h1>Knowledge check</h1>
+   <p>Choose one answer for each question. You will receive feedback and explanations.</p>
+   <form id="quizForm">${part.questions.map((q,i)=>`
+    <div class="question">
+     <p>${i+1}. ${q[0]}</p>
+     ${q[1].map((option,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"> ${option}</label>`).join("")}
+     <div class="feedback" id="feedback${i}"></div>
+    </div>`).join("")}
+   </form>
+   <button class="btn" id="checkButton" onclick="checkQuiz()">Check my answers</button>
+   <div id="quizResult" class="callout hidden" aria-live="polite"></div>
+   <button class="btn outline hidden" id="finishButton" onclick="finishLesson()">Complete lesson ✓</button>`;
+ }
+ body.innerHTML=html;
+}
+function checkQuiz(){
+ if(answersChecked)return;
+ const questions=lessons[currentSubject].sections[age].questions;
+ let score=0,answered=0;
+ questions.forEach((q,i)=>{
+  const chosen=document.querySelector(`input[name="q${i}"]:checked`);
+  const feedback=document.getElementById("feedback"+i);
+  if(!chosen){
+   feedback.innerHTML='<span class="bad">Choose an answer to complete this question.</span>';
+   return;
+  }
+  answered++;
+  if(Number(chosen.value)===q[2]){
+   score++;
+   feedback.innerHTML=`<span class="good">Correct!</span> ${q[3]}`;
+  }else{
+   feedback.innerHTML=`<span class="bad">Not quite.</span> ${q[3]}`;
+  }
+ });
+ if(answered<questions.length){
+  return;
+ }
+ answersChecked=true;
+ stats.answered+=questions.length;
+ stats.correct+=score;
+ saveStats();
+ document.getElementById("quizResult").classList.remove("hidden");
+ document.getElementById("quizResult").innerHTML=`<strong>Your score: ${score} / ${questions.length}</strong><br>${score===questions.length?"Excellent work!":score>0?"Good effort. Read the explanations and keep practising.":"Keep learning. Review the lesson and try again next time."}`;
+ document.getElementById("checkButton").disabled=true;
+ document.getElementById("checkButton").textContent="Answers checked";
+ document.getElementById("finishButton").classList.remove("hidden");
+}
+function finishLesson(){
+ if(!stats.completed.includes(currentSubject)){
+  stats.completed.push(currentSubject);
+  saveStats();
+ }
+ document.getElementById("lessonBody").innerHTML=`
+  <div style="text-align:center;padding:35px 10px">
+   <div style="font-size:55px">✦</div>
+   <span class="tag">LESSON COMPLETED</span>
+   <h1>Well done!</h1>
+   <p>You completed <strong>${lessons[currentSubject].title}</strong>.</p>
+   <p class="small">Keep building your knowledge one lesson at a time.</p>
+   <button class="btn" onclick="showSubjects()">Explore more classrooms</button>
+   <button class="btn outline" onclick="showProgress()" style="margin:8px">View progress</button>
+  </div>`;
+}
+document.getElementById("ageSelect").value=age;
+updateStats();
+goHome();
 </script>
-
 </body>
 </html>
+  
