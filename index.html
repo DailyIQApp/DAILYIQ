@@ -209,13 +209,13 @@ function choose(answer) {
 
 function showHome() {
   hideAll();
-  document.getElementById("home").classList.remove("hidden");
+document.getElementById("dashboard").classList.remove("hidden");
 
   document.getElementById("welcome").textContent =
     "Welcome to DailyIQ!";
 
-  document.getElementById("result").textContent =
-    "Your starting score: " + score + "/5";
+  document.getElementById("progressText").textContent =
+  "Your starting score: " + score + "/5";
 
   document.getElementById("fact").textContent =
     "Octopuses have three hearts!";
@@ -245,6 +245,22 @@ function backHome() {
   document.getElementById("home").classList.remove("hidden");
 }
 </script>
+<div class="card hidden" id="dashboard">
+  <h2>📚 Your DailyIQ Dashboard</h2>
+  <p>Welcome to your learning space!</p>
 
+  <button onclick="showLesson()">📖 Learn</button>
+  <button onclick="showMiniQuiz()">🧠 Quizzes</button>
+
+  <div class="card">
+    <h3>📊 My Progress</h3>
+    <p id="progressText">Starting your learning journey!</p>
+  </div>
+
+  <div class="card">
+    <h3>🌟 Daily Goal</h3>
+    <p>Learn one new thing every day.</p>
+  </div>
+</div>
 </body>
 </html>
