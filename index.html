@@ -1,163 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DailyIQ</title>
 
-<style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 25px;
-  font-family: Arial, sans-serif;
-  background: #100d20;
-  color: white;
-  text-align: center;
-}
-
-h1 {
-  color: #b58aff;
-  font-size: 38px;
-}
-
-.card {
-  background: #211a38;
-  padding: 25px;
-  border-radius: 18px;
-  max-width: 500px;
-  margin: 20px auto;
-}
-
-button, select {
-  padding: 13px;
-  margin: 8px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-button {
-  background: #9562e8;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #ad85f5;
-}
-
-select {
-  background: white;
-  color: #211a38;
-}
-
-.hidden {
-  display: none;
-}
-
-#result {
-  color: #c9aaff;
-  font-size: 20px;
-}
-</style>
-</head>
-
-<body>
-
-<h1>DailyIQ</h1>
-<p>Learn something new every day.</p>
-
-<div class="card" id="start">
-  <h2>Welcome to DailyIQ!</h2>
-  <p>First, choose your age group.</p>
-
-  <select id="age">
-    <option value="">Choose age group</option>
-    <option>Under 12</option>
-    <option>12–15</option>
-    <option>16–18</option>
-    <option>19+</option>
-  </select>
-
-  <br>
-  <button onclick="begin()">Get Started</button>
-</div>
-
-<div class="card hidden" id="quiz">
-  <h2>Starting Quiz</h2>
-  <p id="question"></p>
-  <div id="answers"></div>
-  <p id="progress"></p>
-</div>
-
-<div class="card hidden" id="home">
-  <h2 id="welcome"></h2>
-  <p id="result"></p>
-
-  <h3>💡 Today's Fact</h3>
-  <p id="fact"></p>
-
-  <button onclick="showLesson()">Learn</button>
-  <button onclick="showMiniQuiz()">Mini Quiz</button>
-</div>
-
-<div class="card hidden" id="lesson">
-  <h2>Today's Lesson</h2>
-  <p id="lessonText"></p>
-  <button onclick="backHome()">Back</button>
-</div>
-
-<div class="card hidden" id="mini">
-  <h2>Quick Quiz</h2>
-  <p>Which planet is known as the Red Planet?</p>
-  <button onclick="check('Mars')">Mars</button>
-  <button onclick="check('Venus')">Venus</button>
-  <button onclick="check('Jupiter')">Jupiter</button>
-  <p id="miniResult"></p>
-  <button onclick="backHome()">Back</button>
+  <button onclick="completeGoal()">Complete Today's Goal</button>
+  <button onclick="backHome()">Back to Dashboard</button>
 </div>
 
 <script>
+let selectedAge = "";
+let score = 0;
+let current = 0;
+
 const questions = [
   {
-    q: "Which planet is closest to the Sun?",
-    a: ["Mercury", "Earth", "Mars"],
-    correct: "Mercury"
+    q: "What is the largest planet?",
+    a: ["Earth", "Jupiter", "Mars"],
+    correct: 1
   },
   {
     q: "How many sides does a triangle have?",
-    a: ["Four", "Three", "Five"],
-    correct: "Three"
+    a: ["Three", "Four", "Five"],
+    correct: 0
   },
   {
     q: "Which animal is a mammal?",
     a: ["Shark", "Dolphin", "Crocodile"],
-    correct: "Dolphin"
+    correct: 1
   },
   {
-    q: "What is the largest ocean?",
-    a: ["Atlantic", "Indian", "Pacific"],
-    correct: "Pacific"
+    q: "What is 8 × 7?",
+    a: ["54", "56", "64"],
+    correct: 1
   },
   {
-    q: "What gas do plants absorb?",
-    a: ["Oxygen", "Carbon dioxide", "Hydrogen"],
-    correct: "Carbon dioxide"
+    q: "Which planet is closest to the Sun?",
+    a: ["Venus", "Earth", "Mercury"],
+    correct: 2
   }
 ];
-
-let current = 0;
-let score = 0;
-let selectedAge = "";
 
 function hideAll() {
   document.querySelectorAll(".card").forEach(card => {
     card.classList.add("hidden");
   });
+}
+
+function showAge() {
+  hideAll();
+  document.getElementById("ageScreen").classList.remove("hidden");
 }
 
 function begin() {
@@ -170,31 +57,35 @@ function begin() {
 
   current = 0;
   score = 0;
-  hideAll();
-  document.getElementById("quiz").classList.remove("hidden");
   showQuestion();
 }
 
 function showQuestion() {
-  let q = questions[current];
+  hideAll();
+  document.getElementById("quiz").classList.remove("hidden");
 
-  document.getElementById("question").textContent = q.q;
-  document.getElementById("progress").textContent =
+  const q = questions[current];
+
+  document.getElementById("questionNumber").textContent =
     "Question " + (current + 1) + " of 5";
 
-  let area = document.getElementById("answers");
-  area.innerHTML = "";
+  document.getElementById("question").textContent = q.q;
+  document.getElementById("quizFeedback").textContent = "";
 
-  q.a.forEach(answer => {
-    let btn = document.createElement("button");
-    btn.textContent = answer;
-    btn.onclick = () => choose(answer);
-    area.appendChild(btn);
+  const answers = document.getElementById("answers");
+  answers.innerHTML = "";
+
+  q.a.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.textContent = answer;
+    button.className = "option";
+    button.onclick = () => choose(index);
+    answers.appendChild(button);
   });
 }
 
-function choose(answer) {
-  if (answer === questions[current].correct) {
+function choose(index) {
+  if (index === questions[current].correct) {
     score++;
   }
 
@@ -203,30 +94,34 @@ function choose(answer) {
   if (current < questions.length) {
     showQuestion();
   } else {
-    showHome();
+    showDashboard();
   }
 }
 
-function showHome() {
+function showDashboard() {
   hideAll();
-document.getElementById("dashboard").classList.remove("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
 
   document.getElementById("welcome").textContent =
-    "Welcome to DailyIQ!";
+    "Welcome! Your age group: " + selectedAge;
 
   document.getElementById("progressText").textContent =
-  "Your starting score: " + score + "/5";
-
-  document.getElementById("fact").textContent =
-    "Octopuses have three hearts!";
+    "Your starting score: " + score + "/5";
 }
 
 function showLesson() {
   hideAll();
   document.getElementById("lesson").classList.remove("hidden");
 
+  document.getElementById("lessonTitle").textContent =
+    "Discover the Solar System";
+
   document.getElementById("lessonText").textContent =
-    "Space is full of amazing discoveries. Our solar system has eight planets, and each one is unique!";
+    "Our solar system has eight planets. They orbit the Sun, which is a star.";
+
+  document.getElementById("lessonFact").textContent =
+    "Fun fact: Jupiter is the largest planet!";
+}
 
 function showMiniQuiz() {
   hideAll();
@@ -234,32 +129,146 @@ function showMiniQuiz() {
   document.getElementById("miniResult").textContent = "";
 }
 
-function check(answer) {
+function checkMini(correct) {
   document.getElementById("miniResult").textContent =
-    answer === "Mars" ? "Correct! 🎉" : "Not quite! Try again.";
+    correct ? "Correct! Great work! 🎉" : "Not quite! Try again.";
+}
+
+function showProgress() {
+  hideAll();
+  document.getElementById("progress").classList.remove("hidden");
+
+  document.getElementById("scoreDisplay").textContent =
+    "Starting test score: " + score + "/5";
+}
+
+function showGoals() {
+  hideAll();
+  document
+<script>
+let selectedAge = "";
+let current = 0;
+let score = 0;
+
+const questions = [
+  { q: "Which planet do we live on?", a: ["Mars", "Earth", "Venus"], correct: 1 },
+  { q: "What is 8 × 7?", a: ["54", "56", "64"], correct: 1 },
+  { q: "How many sides does a triangle have?", a: ["Three", "Four", "Five"], correct: 0 },
+  { q: "Which animal is a mammal?", a: ["Shark", "Dolphin", "Crocodile"], correct: 1 },
+  { q: "Which planet is closest to the Sun?", a: ["Venus", "Earth", "Mercury"], correct: 2 }
+];
+
+function hideAll() {
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.add("hidden");
+  });
+}
+
+function showAge() {
+  hideAll();
+  document.getElementById("ageScreen").classList.remove("hidden");
+}
+
+function begin() {
+  selectedAge = document.getElementById("age").value;
+
+  if (!selectedAge) {
+    alert("Please choose your age group!");
+    return;
+  }
+
+  current = 0;
+  score = 0;
+  showQuestion();
+}
+
+function showQuestion() {
+  hideAll();
+  document.getElementById("quiz").classList.remove("hidden");
+
+  let q = questions[current];
+
+  document.getElementById("questionNumber").textContent =
+    "Question " + (current + 1) + " of 5";
+
+  document.getElementById("question").textContent = q.q;
+
+  let answers = document.getElementById("answers");
+  answers.innerHTML = "";
+
+  q.a.forEach((answer, index) => {
+    let button = document.createElement("button");
+    button.textContent = answer;
+    button.className = "option";
+    button.onclick = function() {
+      choose(index);
+    };
+    answers.appendChild(button);
+  });
+}
+
+function choose(index) {
+  if (index === questions[current].correct) {
+    score++;
+  }
+
+  current++;
+
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    showDashboard();
+  }
+}
+
+function showDashboard() {
+  hideAll();
+  document.getElementById("dashboard").classList.remove("hidden");
+
+  document.getElementById("welcome").textContent =
+    "Welcome! Age group: " + selectedAge;
+
+  document.getElementById("progressText").textContent =
+    "Your starting score: " + score + "/5";
+}
+
+function showLesson() {
+  hideAll();
+  document.getElementById("lesson").classList.remove("hidden");
+}
+
+function showMiniQuiz() {
+  hideAll();
+  document.getElementById("mini").classList.remove("hidden");
+  document.getElementById("miniResult").textContent = "";
+}
+
+function checkMini(correct) {
+  document.getElementById("miniResult").textContent =
+    correct ? "Correct! Great work! 🎉" : "Try again!";
+}
+
+function showProgress() {
+  hideAll();
+  document.getElementById("progress").classList.remove("hidden");
+  document.getElementById("scoreDisplay").textContent =
+    "Starting test score: " + score + "/5";
+}
+
+function showGoals() {
+  hideAll();
+  document.getElementById("goals").classList.remove("hidden");
+}
+
+function completeGoal() {
+  document.getElementById("goalStatus").textContent =
+    "Goal completed! Well done! 🌟";
 }
 
 function backHome() {
-  hideAll();
-  document.getElementById("dashboard").classList.remove("hidden");
+  showDashboard();
 }
 </script>
-<div class="card hidden" id="dashboard">
-  <h2>📚 Your DailyIQ Dashboard</h2>
-  <p>Welcome to your learning space!</p>
 
-  <button onclick="showLesson()">📖 Learn</button>
-  <button onclick="showMiniQuiz()">🧠 Quizzes</button>
-
-  <div class="card">
-    <h3>📊 My Progress</h3>
-    <p id="progressText">Starting your learning journey!</p>
-  </div>
-
-  <div class="card">
-    <h3>🌟 Daily Goal</h3>
-    <p>Learn one new thing every day.</p>
-  </div>
-</div>
 </body>
 </html>
