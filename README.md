@@ -1,2 +1,2 @@
-# DAILYIQ
+# EDVORIA
 Your everyday knowledge companion
